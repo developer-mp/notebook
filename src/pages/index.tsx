@@ -16,8 +16,8 @@ const Home: NextPage = () => {
       <main>
         <Header />
         <Notes />
-        <Line />
         <Content />
+        {/* <Line /> */}
       </main>
     </>
   );

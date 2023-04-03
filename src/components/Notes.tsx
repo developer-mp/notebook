@@ -1,5 +1,7 @@
 import { useSession } from "next-auth/react";
 import { api } from "../utils/api";
+import { Note } from "./Note";
+import { useState } from "react";
 
 export const Notes: React.FC = () => {
   const { data: sessionData } = useSession();
@@ -17,28 +19,28 @@ export const Notes: React.FC = () => {
     },
   });
 
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
+
+  const handleNoteClick = (noteId: string) => {
+    setSelectedNoteId(noteId);
+  };
+
   return (
-    <div className="mt-1 w-1/5 text-center font-bold">
-      Notes
-      <div>Search</div>
-      <div className="mt-4 flex flex-col place-items-center">
-        <ul className="mb-2">
-          {notes?.map((note) => (
-            <li key={note.id}>
-              {note.title}
-              {note.content}
-              <button
-                className="ml-2 rounded bg-red-500 px-1 py-0.5 text-xs text-white"
-                onClick={() => {
-                  void deleteNote.mutate({ id: note.id });
-                }}
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="h-screen w-1/5 border-r-2">
+      <div className="border-b-2 p-2 text-center font-bold">Notes</div>
+      <div className="border-b-2 p-2 text-center font-bold">Search</div>
+      {notes?.map((note) => (
+        <Note
+          key={note.id}
+          title={note.title}
+          content={note.content}
+          onClick={() => {
+            void deleteNote.mutate({ id: note.id });
+          }}
+          isSelected={note.id === selectedNoteId}
+          onNoteClick={() => handleNoteClick(note.id)}
+        />
+      ))}
     </div>
   );
 };

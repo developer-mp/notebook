@@ -1,3 +1,3 @@
 export const Line = () => {
-  return <hr className="h-full w-1/2 rotate-90" />;
+  return <hr className="w-1/2 rotate-90" />;
 };
