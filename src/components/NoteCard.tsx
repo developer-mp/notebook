@@ -9,7 +9,7 @@ export const NoteCard = ({
   const [content, setContent] = useState<string>("");
 
   return (
-    <div className="flex min-w-min">
+    <div className="flex">
       <div className="flex flex-col rounded-md bg-white p-4 shadow-lg">
         <div className="mb-2">
           <input
@@ -17,7 +17,7 @@ export const NoteCard = ({
             placeholder="Note title"
             value={title}
             onChange={(e) => setTitle(e.currentTarget.value)}
-            className="w-full rounded-md border border-solid border-indigo-300 p-2 text-sm"
+            className="w-80 rounded-md border border-solid border-blue-900 p-2 text-sm focus:outline-blue-900"
           />
         </div>
         <div>
@@ -25,7 +25,7 @@ export const NoteCard = ({
             placeholder="Note content"
             value={content}
             onChange={(e) => setContent(e.currentTarget.value)}
-            className="h-48 w-full resize-none rounded-md border border-solid border-indigo-300 p-2 text-sm"
+            className="h-40 w-80 resize-none rounded-md border border-solid border-blue-900 p-2 text-sm focus:outline-blue-900"
           />
         </div>
         <div className="mt-2 flex justify-end">
@@ -38,7 +38,7 @@ export const NoteCard = ({
               setTitle("");
               setContent("");
             }}
-            className="rounded-md bg-indigo-500 px-4 py-2 text-sm text-white"
+            className="rounded-md bg-blue-900 px-4 py-2 text-sm text-white"
             disabled={title.trim().length === 0 || content.trim().length === 0}
           >
             Save

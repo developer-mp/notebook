@@ -17,7 +17,7 @@ export const Note = (props: {
   return (
     <div
       className={`flex flex-col border-b-2 p-2 ${
-        isSelected ? "bg-yellow-100" : ""
+        isSelected ? "bg-teal-100" : ""
       }`}
       onClick={onNoteClick}
     >
