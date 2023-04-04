@@ -3,10 +3,13 @@ import { api } from "../utils/api";
 import { Note } from "./Note";
 import { useState } from "react";
 import { IoCreateOutline } from "react-icons/io5";
+import { AiOutlineSearch } from "react-icons/ai";
 import { NoteCard } from "~/components/NoteCard";
 import Popup from "reactjs-popup";
 
 export const Notes: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
   const { data: sessionData } = useSession();
 
   const { data: notes, refetch: refetchNotes } = api.note.getAll.useQuery(
@@ -34,12 +37,29 @@ export const Notes: React.FC = () => {
     setSelectedNoteId(noteId);
   };
 
+  const filteredNotes = notes?.filter(
+    (note) =>
+      note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      note.content.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="flex">
       <div className="h-screen w-1/5 border-r-2">
         <div className="border-b-2 p-2 text-center font-bold">Notes</div>
-        <div className="border-b-2 p-2 text-center font-bold">Search</div>
-        {notes?.map((note) => (
+        <div className="flex items-center border-b-2 p-2">
+          <div className="ml-5 text-xl font-bold text-gray-500">
+            <AiOutlineSearch />
+          </div>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Quick search"
+            className="ml-2 focus:outline-none"
+          />
+        </div>
+        {filteredNotes?.map((note) => (
           <Note
             key={note.id}
             title={note.title}
