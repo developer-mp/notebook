@@ -3,7 +3,7 @@ import { api } from "../utils/api";
 import { Note } from "./Note";
 import { useState } from "react";
 import { IoCreateOutline } from "react-icons/io5";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineEdit } from "react-icons/ai";
 import { NoteCard } from "~/components/NoteCard";
 import Popup from "reactjs-popup";
 
@@ -14,8 +14,11 @@ export type Note = {
 };
 
 export const Notes: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isNoteCardOpen, setIsNoteCardOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isNoteCardOpen, setIsNoteCardOpen] = useState<boolean>(false);
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
+  const [selectedNoteTitle, setSelectedNoteTitle] = useState<string>("");
+  const [selectedNoteContent, setSelectedNoteContent] = useState<string>("");
 
   const { data: sessionData } = useSession();
 
@@ -38,16 +41,18 @@ export const Notes: React.FC = () => {
     },
   });
 
-  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
-  const [selectedNoteTitle, setSelectedNoteTitle] = useState("");
-  const [selectedNoteContent, setSelectedNoteContent] = useState("");
-
-  const handleNoteClick = (noteId: string) => {
-    const selectedNote = notes?.find((note) => note.id === noteId);
-    if (selectedNote) {
-      setSelectedNoteId(selectedNote.id);
-      setSelectedNoteTitle(selectedNote.title);
-      setSelectedNoteContent(selectedNote.content);
+  const handleNoteClick = (noteId: string): void => {
+    if (noteId === selectedNoteId) {
+      setSelectedNoteId(null);
+      setSelectedNoteTitle("");
+      setSelectedNoteContent("");
+    } else {
+      const selectedNote = notes?.find((note) => note.id === noteId);
+      if (selectedNote) {
+        setSelectedNoteId(selectedNote.id);
+        setSelectedNoteTitle(selectedNote.title);
+        setSelectedNoteContent(selectedNote.content);
+      }
     }
   };
 
@@ -93,7 +98,10 @@ export const Notes: React.FC = () => {
               <Popup
                 trigger={
                   <button>
-                    <IoCreateOutline />
+                    <div className="flex">
+                      <IoCreateOutline className="mr-2" />
+                      <AiOutlineEdit />
+                    </div>
                   </button>
                 }
                 onOpen={() => setIsNoteCardOpen(true)}
