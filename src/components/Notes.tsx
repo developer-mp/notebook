@@ -3,7 +3,7 @@ import { api } from "../utils/api";
 import { Note } from "./Note";
 import { useState } from "react";
 import { IoCreateOutline } from "react-icons/io5";
-import { AiOutlineSearch, AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineEdit, AiOutlineMail } from "react-icons/ai";
 import { NoteCard } from "~/components/NoteCard";
 import Popup from "reactjs-popup";
 
@@ -99,8 +99,23 @@ export const Notes: React.FC = () => {
                 trigger={
                   <button>
                     <div className="flex">
-                      <IoCreateOutline className="mr-2" />
-                      <AiOutlineEdit />
+                      <IoCreateOutline className="mr-2" title="Create note" />
+                      <AiOutlineEdit
+                        className={`${
+                          selectedNoteId
+                            ? "mr-2"
+                            : "mr-2 cursor-not-allowed opacity-50"
+                        }`}
+                        title="Edit note"
+                      />
+                      <AiOutlineMail
+                        className={`${
+                          selectedNoteId
+                            ? "mr-2"
+                            : "mr-2 cursor-not-allowed opacity-50"
+                        }`}
+                        title="Email note"
+                      />
                     </div>
                   </button>
                 }
