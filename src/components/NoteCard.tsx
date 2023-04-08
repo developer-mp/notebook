@@ -4,6 +4,7 @@ export const NoteCard = ({
   onSave,
 }: {
   onSave: (note: { title: string; content: string }) => void;
+  initialValues: { title: string; content: string };
 }) => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");

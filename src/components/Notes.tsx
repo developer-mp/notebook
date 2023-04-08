@@ -35,6 +35,12 @@ export const Notes: React.FC = () => {
     },
   });
 
+  const updateNote = api.note.update.useMutation({
+    onSuccess: () => {
+      void refetchNotes();
+    },
+  });
+
   const deleteNote = api.note.delete.useMutation({
     onSuccess: () => {
       void refetchNotes();
@@ -56,6 +62,15 @@ export const Notes: React.FC = () => {
     }
   };
 
+  const handleEditNoteClick = (): void => {
+    const selectedNote = notes?.find((note) => note.id === selectedNoteId);
+    if (selectedNote) {
+      setSelectedNoteTitle(selectedNote.title);
+      setSelectedNoteContent(selectedNote.content);
+      setIsNoteCardOpen(true);
+    }
+  };
+
   const filteredNotes = notes?.filter(
     (note) =>
       note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -65,7 +80,9 @@ export const Notes: React.FC = () => {
   return (
     <div className="flex">
       <div className="h-screen w-1/5 border-r-2">
-        <div className="border-b-2 p-2 text-center font-bold">Notes</div>
+        <div className="w-screen border-b-2 p-2 font-bold">
+          <div className="ml-32">Notes</div>
+        </div>
         <div className="flex items-center border-b-2 p-2">
           <div className="ml-5 text-xl font-bold text-gray-500">
             <AiOutlineSearch />
@@ -107,6 +124,7 @@ export const Notes: React.FC = () => {
                             : "mr-2 cursor-not-allowed opacity-50"
                         }`}
                         title="Edit note"
+                        onClick={handleEditNoteClick}
                       />
                       <AiOutlineMail
                         className={`${
@@ -126,11 +144,23 @@ export const Notes: React.FC = () => {
                   <div className="ml-96 mt-4 flex flex-col place-items-center">
                     <NoteCard
                       onSave={({ title, content }) => {
-                        void createNote.mutate({
-                          title,
-                          content,
-                        });
+                        if (selectedNoteId) {
+                          void updateNote.mutate({
+                            id: selectedNoteId,
+                            title,
+                            content,
+                          });
+                        } else {
+                          void createNote.mutate({
+                            title,
+                            content,
+                          });
+                        }
                         setIsNoteCardOpen(false);
+                      }}
+                      initialValues={{
+                        title: selectedNoteTitle,
+                        content: selectedNoteContent,
                       }}
                     />
                   </div>
@@ -142,7 +172,9 @@ export const Notes: React.FC = () => {
         {selectedNoteId ? (
           <div className="p-10">
             <h2 className="mb-2 text-xl font-bold">{selectedNoteTitle}</h2>
-            <p className="whitespace-pre-wrap">{selectedNoteContent}</p>
+            <p className="whitespace-pre-wrap text-gray-500">
+              {selectedNoteContent}
+            </p>
           </div>
         ) : (
           <p className="p-20 text-lg text-gray-400">No note selected</p>
