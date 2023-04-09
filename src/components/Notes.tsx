@@ -1,3 +1,61 @@
+// import { useSession } from "next-auth/react";
+// import { api } from "../utils/api";
+// import { Note } from "./Note";
+// import { useState } from "react";
+
+// export type Note = {
+//   id: string;
+//   title: string;
+//   content: string;
+// };
+
+// export const Notes: React.FC = () => {
+//   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
+
+//   const { data: sessionData } = useSession();
+
+//   const { data: notes, refetch: refetchNotes } = api.note.getAll.useQuery(
+//     undefined,
+//     {
+//       enabled: sessionData?.user !== undefined,
+//     }
+//   );
+
+//   const deleteNote = api.note.delete.useMutation({
+//     onSuccess: () => {
+//       void refetchNotes();
+//     },
+//   });
+
+//   const handleNoteClick = (noteId: string): void => {
+//     if (noteId === selectedNoteId) {
+//       setSelectedNoteId(null);
+//     } else {
+//       setSelectedNoteId(noteId);
+//     }
+//   };
+
+//   return (
+//     <div className="flex">
+//       <div className="h-screen w-1/5 border-r-2">
+//         {notes?.map((note) => (
+//           <Note
+//             key={note.id}
+//             id={note.id}
+//             title={note.title}
+//             content={note.content}
+//             onClick={() => {
+//               void deleteNote.mutate({ id: note.id });
+//             }}
+//             isSelected={note.id === selectedNoteId}
+//             onNoteClick={() => handleNoteClick(note.id)}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
 import { useSession } from "next-auth/react";
 import { api } from "../utils/api";
 import { Note } from "./Note";
@@ -56,15 +114,6 @@ export const Notes: React.FC = () => {
     }
   };
 
-  const handleEditNoteClick = (): void => {
-    const selectedNote = notes?.find((note) => note.id === selectedNoteId);
-    if (selectedNote) {
-      setSelectedNoteTitle(selectedNote.title);
-      setSelectedNoteContent(selectedNote.content);
-      setIsNoteCardOpen(true);
-    }
-  };
-
   const filteredNotes = notes?.filter(
     (note) =>
       note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -92,6 +141,7 @@ export const Notes: React.FC = () => {
         {filteredNotes?.map((note) => (
           <Note
             key={note.id}
+            id={note.id}
             title={note.title}
             content={note.content}
             onClick={() => {
@@ -118,7 +168,6 @@ export const Notes: React.FC = () => {
                             : "mr-2 cursor-not-allowed opacity-50"
                         }`}
                         title="Edit note"
-                        onClick={handleEditNoteClick}
                       />
                       <AiOutlineMail
                         className={`${

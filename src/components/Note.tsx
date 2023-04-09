@@ -1,6 +1,5 @@
-import { useState } from "react";
-
 export const Note = (props: {
+  id: string;
   title: string;
   content: string;
   onClick?: () => void;
@@ -8,7 +7,6 @@ export const Note = (props: {
   onNoteClick?: () => void;
 }) => {
   const { title, content, onClick, isSelected, onNoteClick } = props;
-  const [isNoteSelected, setIsNoteSelected] = useState(isSelected);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -18,7 +16,6 @@ export const Note = (props: {
   };
 
   const handleNoteClick = () => {
-    setIsNoteSelected(!isNoteSelected);
     if (onNoteClick) {
       onNoteClick();
     }
@@ -27,7 +24,7 @@ export const Note = (props: {
   return (
     <div
       className={`flex flex-col border-b-2 p-2 ${
-        isNoteSelected ? "bg-teal-100" : ""
+        isSelected ? "bg-teal-100" : ""
       }`}
       onClick={handleNoteClick}
     >
