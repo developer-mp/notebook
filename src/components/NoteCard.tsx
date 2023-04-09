@@ -4,7 +4,6 @@ export const NoteCard = ({
   onSave,
 }: {
   onSave: (note: { title: string; content: string }) => void;
-  initialValues: { title: string; content: string };
 }) => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
@@ -39,7 +38,11 @@ export const NoteCard = ({
               setTitle("");
               setContent("");
             }}
-            className="rounded-md bg-blue-900 px-4 py-2 text-sm text-white"
+            className={`rounded-md bg-blue-900 px-4 py-2 text-sm text-white ${
+              title.trim().length === 0 || content.trim().length === 0
+                ? "cursor-not-allowed opacity-50"
+                : ""
+            }`}
             disabled={title.trim().length === 0 || content.trim().length === 0}
           >
             Save

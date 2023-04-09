@@ -35,12 +35,6 @@ export const Notes: React.FC = () => {
     },
   });
 
-  const updateNote = api.note.update.useMutation({
-    onSuccess: () => {
-      void refetchNotes();
-    },
-  });
-
   const deleteNote = api.note.delete.useMutation({
     onSuccess: () => {
       void refetchNotes();
@@ -144,23 +138,11 @@ export const Notes: React.FC = () => {
                   <div className="ml-96 mt-4 flex flex-col place-items-center">
                     <NoteCard
                       onSave={({ title, content }) => {
-                        if (selectedNoteId) {
-                          void updateNote.mutate({
-                            id: selectedNoteId,
-                            title,
-                            content,
-                          });
-                        } else {
-                          void createNote.mutate({
-                            title,
-                            content,
-                          });
-                        }
+                        void createNote.mutate({
+                          title,
+                          content,
+                        });
                         setIsNoteCardOpen(false);
-                      }}
-                      initialValues={{
-                        title: selectedNoteTitle,
-                        content: selectedNoteContent,
                       }}
                     />
                   </div>
