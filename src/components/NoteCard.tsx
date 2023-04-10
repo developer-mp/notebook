@@ -1,12 +1,18 @@
 import { useState } from "react";
 
+interface NoteCardProps {
+  defaultTitle?: string;
+  defaultContent?: string;
+  onSave: ({ title, content }: { title: string; content: string }) => void;
+}
+
 export const NoteCard = ({
+  defaultTitle = "",
+  defaultContent = "",
   onSave,
-}: {
-  onSave: (note: { title: string; content: string }) => void;
-}) => {
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
+}: NoteCardProps) => {
+  const [title, setTitle] = useState<string>(defaultTitle);
+  const [content, setContent] = useState<string>(defaultContent);
 
   return (
     <div className="flex">
