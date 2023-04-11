@@ -333,14 +333,16 @@ export const Notes: React.FC = () => {
           </div>
         </div>
         {selectedNoteId ? (
-          <div className="p-10">
+          <div className="mt-4 ml-2 max-w-sm rounded-lg border p-8 shadow-md">
             <h2 className="mb-2 text-xl font-bold">{selectedNoteTitle}</h2>
-            <p className="whitespace-pre-wrap text-gray-500">
+            <p className="whitespace-pre-wrap text-gray-700">
               {selectedNoteContent}
             </p>
           </div>
         ) : (
-          <p className="p-20 text-lg text-gray-400">No note selected</p>
+          <div className="items-left ml-2 mt-4 flex max-w-sm justify-center rounded-lg border p-12 text-lg text-gray-400 shadow-md">
+            <p>No note selected</p>
+          </div>
         )}
       </div>
     </div>
