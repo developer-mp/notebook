@@ -264,22 +264,15 @@ export const Notes: React.FC = () => {
                   <button>
                     <div className="flex">
                       <IoCreateOutline className="mr-2" title="Create note" />
-                      {/* <AiOutlineMail
-                        className={`${
-                          selectedNoteId
-                            ? "mr-2"
-                            : "mr-2 cursor-not-allowed opacity-50"
-                        }`}
-                        title="Email note"
-                      /> */}
                     </div>
                   </button>
                 }
+                arrow={false}
                 onOpen={() => setIsNoteCardOpen(true)}
                 onClose={() => setIsNoteCardOpen(false)}
               >
                 {isNoteCardOpen && (
-                  <div className="ml-96 mt-4 flex flex-col place-items-center">
+                  <div className="mt-4 ml-96 flex flex-col place-items-center">
                     <NoteCard
                       onSave={({ title, content }) => {
                         void createNote.mutate({
@@ -307,6 +300,7 @@ export const Notes: React.FC = () => {
                     </div>
                   </button>
                 }
+                arrow={false}
                 onOpen={() => setIsNoteCardOpen(true)}
                 onClose={() => setIsNoteCardOpen(false)}
               >
@@ -329,11 +323,44 @@ export const Notes: React.FC = () => {
                   </div>
                 )}
               </Popup>
+              <Popup
+                trigger={
+                  <button>
+                    <div className="flex">
+                      <AiOutlineMail
+                        className={`${
+                          selectedNoteId
+                            ? "mr-2"
+                            : "mr-2 cursor-not-allowed opacity-50"
+                        }`}
+                        title="Email note"
+                      />
+                    </div>
+                  </button>
+                }
+                arrow={false}
+                onOpen={() => setIsNoteCardOpen(true)}
+                onClose={() => setIsNoteCardOpen(false)}
+              >
+                {isNoteCardOpen && (
+                  <div className="mt-4 ml-96 flex flex-col place-items-center">
+                    <NoteCard
+                      onSave={({ title, content }) => {
+                        void createNote.mutate({
+                          title,
+                          content,
+                        });
+                        setIsNoteCardOpen(false);
+                      }}
+                    />
+                  </div>
+                )}
+              </Popup>
             </div>
           </div>
         </div>
         {selectedNoteId ? (
-          <div className="mt-4 ml-2 max-w-sm rounded-lg border p-8 shadow-md">
+          <div className="mt-4 ml-2 max-w-sm rounded-lg border bg-gray-100 p-8 shadow-md">
             <h2 className="mb-2 text-xl font-bold">{selectedNoteTitle}</h2>
             <p className="whitespace-pre-wrap text-gray-700">
               {selectedNoteContent}
