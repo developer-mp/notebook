@@ -8,7 +8,7 @@ export const Header = () => {
       <div className="ml-5 flex-1 p-2 text-lg font-bold">
         {sessionData?.user?.name ? `Notebook of ${sessionData.user.name}` : ""}
       </div>
-      <div className="mr-5 flex text-sm">
+      <div className="mr-5 flex p-2 text-sm">
         {sessionData?.user ? (
           <button onClick={() => void signOut()}>Sign out</button>
         ) : (
