@@ -49,9 +49,9 @@ export const Notes: React.FC = () => {
 
   function sendEmail(title: string, content: string, recipientEmail: string) {
     const templateParams = {
-      from_name: "Notebook App",
-      to_name: recipientEmail,
-      subject: title,
+      user_name: "Notebook App",
+      user_email: recipientEmail,
+      user_subject: title,
       message: content,
       to_email: recipientEmail,
     };
