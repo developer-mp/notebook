@@ -244,7 +244,7 @@ export const Notes: React.FC = () => {
                       recipientEmail={"gg"}
                       defaultTitle={selectedNoteTitle}
                       defaultContent={selectedNoteContent}
-                      onSave={({ title, content, recipientEmail }) => {
+                      onSubmit={({ title, content, recipientEmail }) => {
                         sendEmail(title, content, recipientEmail);
                         setIsNoteCardOpen(false);
                       }}

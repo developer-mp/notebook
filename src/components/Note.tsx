@@ -1,11 +1,6 @@
-export const Note = (props: {
-  id: string;
-  title: string;
-  content: string;
-  onClick?: () => void;
-  isSelected?: boolean;
-  onNoteClick?: () => void;
-}) => {
+import { type INote } from "~/typings/Note";
+
+export const Note: React.FC<INote> = (props) => {
   const { title, content, onClick, isSelected, onNoteClick } = props;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

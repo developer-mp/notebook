@@ -1,18 +1,9 @@
 import { useState } from "react";
+import { type INoteCard } from "~/typings/NoteCard";
 
-interface NoteCardProps {
-  defaultTitle?: string;
-  defaultContent?: string;
-  onSave: ({ title, content }: { title: string; content: string }) => void;
-}
-
-export const NoteCard = ({
-  defaultTitle = "",
-  defaultContent = "",
-  onSave,
-}: NoteCardProps) => {
-  const [title, setTitle] = useState<string>(defaultTitle);
-  const [content, setContent] = useState<string>(defaultContent);
+export const NoteCard: React.FC<INoteCard> = (props) => {
+  const [title, setTitle] = useState<string>(props.defaultTitle ?? "");
+  const [content, setContent] = useState<string>(props.defaultContent ?? "");
 
   return (
     <div className="flex">
@@ -37,7 +28,7 @@ export const NoteCard = ({
         <div className="mt-2 flex justify-end">
           <button
             onClick={() => {
-              onSave({
+              props.onSave({
                 title,
                 content,
               });

@@ -1,27 +1,9 @@
 import { useState } from "react";
+import { type IEmailCard } from "~/typings/EmailCard";
 
-interface EmailCardProps {
-  defaultTitle?: string;
-  defaultContent?: string;
-  recipientEmail: string;
-  onSave: ({
-    title,
-    content,
-    recipientEmail,
-  }: {
-    title: string;
-    content: string;
-    recipientEmail: string;
-  }) => void;
-}
-
-export const EmailCard = ({
-  defaultTitle = "",
-  defaultContent = "",
-  onSave,
-}: EmailCardProps) => {
-  const [title, setTitle] = useState<string>(defaultTitle);
-  const [content, setContent] = useState<string>(defaultContent);
+export const EmailCard: React.FC<IEmailCard> = (props) => {
+  const [title, setTitle] = useState<string>(props.defaultTitle ?? "");
+  const [content, setContent] = useState<string>(props.defaultContent ?? "");
   const [recipientEmail, setRecipientEmail] = useState<string>("");
 
   return (
@@ -54,7 +36,7 @@ export const EmailCard = ({
         <div className="mt-2 flex justify-end">
           <button
             onClick={() => {
-              onSave({
+              props.onSubmit({
                 title,
                 content,
                 recipientEmail,
