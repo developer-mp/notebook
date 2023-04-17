@@ -1,8 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { Header } from "~/components/Header";
-import { Notes } from "~/components/Notes";
-// import { Content } from "~/components/Content";
+import { Content } from "~/app/Content";
 
 const Home: NextPage = () => {
   return (
@@ -14,8 +13,7 @@ const Home: NextPage = () => {
       </Head>
       <main>
         <Header />
-        <Notes />
-        {/* <Content /> */}
+        <Content />
       </main>
     </>
   );

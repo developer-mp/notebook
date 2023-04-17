@@ -1,11 +1,11 @@
 import { useSession } from "next-auth/react";
 import { api } from "../utils/api";
-import { Note } from "./Note";
+import { Note } from "../components/Note";
 import { useState, useEffect } from "react";
 import { IoCreateOutline } from "react-icons/io5";
 import { AiOutlineSearch, AiOutlineEdit, AiOutlineMail } from "react-icons/ai";
 import { NoteCard } from "~/components/NoteCard";
-import { EmailCard } from "./EmailCard";
+import { EmailCard } from "../components/EmailCard";
 import Popup from "reactjs-popup";
 import emailjs from "emailjs-com";
 
@@ -15,7 +15,7 @@ export type Note = {
   content: string;
 };
 
-export const Notes: React.FC = () => {
+export const Content: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isNoteCardOpen, setIsNoteCardOpen] = useState<boolean>(false);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
