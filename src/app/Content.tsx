@@ -9,12 +9,6 @@ import { EmailCard } from "../components/EmailCard";
 import Popup from "reactjs-popup";
 import emailjs from "emailjs-com";
 
-export type Note = {
-  id: string;
-  title: string;
-  content: string;
-};
-
 export const Content: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isNoteCardOpen, setIsNoteCardOpen] = useState<boolean>(false);
@@ -37,13 +31,13 @@ export const Content: React.FC = () => {
     },
   });
 
-  const deleteNote = api.note.delete.useMutation({
+  const updateNote = api.note.update.useMutation({
     onSuccess: () => {
       void refetchNotes();
     },
   });
 
-  const updateNote = api.note.update.useMutation({
+  const deleteNote = api.note.delete.useMutation({
     onSuccess: () => {
       void refetchNotes();
     },
