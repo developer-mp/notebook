@@ -8,6 +8,8 @@ import { NoteCard } from "~/components/NoteCard";
 import { EmailCard } from "../components/EmailCard";
 import Popup from "reactjs-popup";
 import { sendEmail } from "~/services/sendEmail";
+import React from "react";
+import { type IconType } from "react-icons";
 
 export const Content: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -74,6 +76,134 @@ export const Content: React.FC = () => {
     }
   }, [selectedNoteId, notes]);
 
+  const popupProps = {
+    arrow: false,
+    onOpen: () => setIsNoteCardOpen(true),
+    onClose: () => setIsNoteCardOpen(false),
+  };
+
+  const PopupIcon = ({
+    icon: Icon,
+    iconDisplay: IconDisplay,
+    title,
+    content,
+  }: {
+    icon: IconType | null;
+    iconDisplay: IconType | null;
+    title: string;
+    content: React.ReactNode;
+  }) => (
+    <Popup
+      trigger={
+        <button>
+          {Icon && (
+            <div className="flex">
+              <Icon
+                className={`mr-2 ${
+                  selectedNoteId ? "" : "cursor-not-allowed opacity-50"
+                }`}
+                title={title}
+              />
+            </div>
+          )}
+          {IconDisplay && (
+            <div className="flex">
+              <IconDisplay className="mr-2" title={title} />
+            </div>
+          )}
+        </button>
+      }
+      {...popupProps}
+    >
+      <div className="mt-4 ml-96 flex flex-col place-items-center">
+        {content}
+      </div>
+    </Popup>
+  );
+
+  const popupData = [
+    {
+      key: "create-note",
+      popupComponent: (
+        <PopupIcon
+          icon={null}
+          iconDisplay={IoCreateOutline}
+          title="Create note"
+          content={
+            <React.Fragment>
+              {isNoteCardOpen && (
+                <NoteCard
+                  onSave={({ title, content }) => {
+                    void createNote.mutate({
+                      title,
+                      content,
+                    });
+                    setIsNoteCardOpen(false);
+                  }}
+                />
+              )}
+            </React.Fragment>
+          }
+        />
+      ),
+    },
+    {
+      key: "edit-note",
+      popupComponent: (
+        <PopupIcon
+          icon={AiOutlineEdit}
+          iconDisplay={null}
+          title="Edit note"
+          content={
+            <React.Fragment>
+              {isNoteCardOpen && selectedNoteId && (
+                <NoteCard
+                  defaultTitle={selectedNoteTitle}
+                  defaultContent={selectedNoteContent}
+                  onSave={({ title, content }) => {
+                    if (selectedNoteId) {
+                      void updateNote.mutate({
+                        id: selectedNoteId,
+                        title,
+                        content,
+                      });
+                      setIsNoteCardOpen(false);
+                    }
+                  }}
+                />
+              )}
+            </React.Fragment>
+          }
+        />
+      ),
+    },
+    {
+      key: "email-note",
+      popupComponent: (
+        <PopupIcon
+          icon={AiOutlineMail}
+          iconDisplay={null}
+          title="Email note"
+          content={
+            <React.Fragment>
+              {isNoteCardOpen && selectedNoteId && (
+                <EmailCard
+                  recipientEmail={""}
+                  defaultTitle={selectedNoteTitle}
+                  defaultContent={selectedNoteContent}
+                  onSubmit={({ title, content, recipientEmail }) => {
+                    sendEmail(title, content, recipientEmail);
+                    setIsNoteCardOpen(false);
+                  }}
+                />
+              )}
+            </React.Fragment>
+          }
+        />
+      ),
+    },
+  ];
+
   return (
     <div className="flex">
       <div className="h-screen w-1/5 border-r-2">
@@ -110,103 +240,11 @@ export const Content: React.FC = () => {
         <div className="mb-2 flex items-center">
           <div className="text-xl font-bold text-gray-500">
             <div className="text-2xl text-blue-900">
-              <Popup
-                trigger={
-                  <button>
-                    <div className="flex">
-                      <IoCreateOutline className="mr-2" title="Create note" />
-                    </div>
-                  </button>
-                }
-                arrow={false}
-                onOpen={() => setIsNoteCardOpen(true)}
-                onClose={() => setIsNoteCardOpen(false)}
-              >
-                {isNoteCardOpen && (
-                  <div className="mt-4 ml-96 flex flex-col place-items-center">
-                    <NoteCard
-                      onSave={({ title, content }) => {
-                        void createNote.mutate({
-                          title,
-                          content,
-                        });
-                        setIsNoteCardOpen(false);
-                      }}
-                    />
-                  </div>
-                )}
-              </Popup>
-              <Popup
-                trigger={
-                  <button>
-                    <div className="flex">
-                      <AiOutlineEdit
-                        className={`${
-                          selectedNoteId
-                            ? "mr-2"
-                            : "mr-2 cursor-not-allowed opacity-50"
-                        }`}
-                        title="Edit note"
-                      />
-                    </div>
-                  </button>
-                }
-                arrow={false}
-                onOpen={() => setIsNoteCardOpen(true)}
-                onClose={() => setIsNoteCardOpen(false)}
-              >
-                {isNoteCardOpen && (
-                  <div className="ml-96 mt-4 flex flex-col place-items-center">
-                    <NoteCard
-                      defaultTitle={selectedNoteTitle}
-                      defaultContent={selectedNoteContent}
-                      onSave={({ title, content }) => {
-                        if (selectedNoteId) {
-                          void updateNote.mutate({
-                            id: selectedNoteId,
-                            title,
-                            content,
-                          });
-                          setIsNoteCardOpen(false);
-                        }
-                      }}
-                    />
-                  </div>
-                )}
-              </Popup>
-              <Popup
-                trigger={
-                  <button>
-                    <div className="flex">
-                      <AiOutlineMail
-                        className={`${
-                          selectedNoteId
-                            ? "mr-2"
-                            : "mr-2 cursor-not-allowed opacity-50"
-                        }`}
-                        title="Email note"
-                      />
-                    </div>
-                  </button>
-                }
-                arrow={false}
-                onOpen={() => setIsNoteCardOpen(true)}
-                onClose={() => setIsNoteCardOpen(false)}
-              >
-                {isNoteCardOpen && (
-                  <div className="mt-4 ml-96 flex flex-col place-items-center">
-                    <EmailCard
-                      recipientEmail={"gg"}
-                      defaultTitle={selectedNoteTitle}
-                      defaultContent={selectedNoteContent}
-                      onSubmit={({ title, content, recipientEmail }) => {
-                        sendEmail(title, content, recipientEmail);
-                        setIsNoteCardOpen(false);
-                      }}
-                    />
-                  </div>
-                )}
-              </Popup>
+              {popupData.map((data) => (
+                <React.Fragment key={data.key}>
+                  {data.popupComponent}
+                </React.Fragment>
+              ))}
             </div>
           </div>
         </div>
