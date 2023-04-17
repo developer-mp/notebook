@@ -7,16 +7,16 @@ import { AiOutlineSearch, AiOutlineEdit, AiOutlineMail } from "react-icons/ai";
 import { NoteCard } from "~/components/NoteCard";
 import { EmailCard } from "../components/EmailCard";
 import Popup from "reactjs-popup";
-import { sendEmail } from "~/services/sendEmail";
+import { sendEmail } from "~/services/email";
 import React from "react";
 import { type IconType } from "react-icons";
 
 export const Content: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isNoteCardOpen, setIsNoteCardOpen] = useState<boolean>(false);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [selectedNoteTitle, setSelectedNoteTitle] = useState<string>("");
   const [selectedNoteContent, setSelectedNoteContent] = useState<string>("");
+  const [openWindow, setOpenWindow] = useState<boolean>(false);
 
   const { data: sessionData } = useSession();
 
@@ -50,12 +50,14 @@ export const Content: React.FC = () => {
       setSelectedNoteId(null);
       setSelectedNoteTitle("");
       setSelectedNoteContent("");
+      setOpenWindow(false)
     } else {
       const selectedNote = notes?.find((note) => note.id === noteId);
       if (selectedNote) {
         setSelectedNoteId(selectedNote.id);
         setSelectedNoteTitle(selectedNote.title);
         setSelectedNoteContent(selectedNote.content);
+        setOpenWindow(true);
       }
     }
   };
@@ -76,12 +78,6 @@ export const Content: React.FC = () => {
     }
   }, [selectedNoteId, notes]);
 
-  const popupProps = {
-    arrow: false,
-    onOpen: () => setIsNoteCardOpen(true),
-    onClose: () => setIsNoteCardOpen(false),
-  };
-
   const PopupIcon = ({
     icon: Icon,
     iconDisplay: IconDisplay,
@@ -92,34 +88,36 @@ export const Content: React.FC = () => {
     iconDisplay: IconType | null;
     title: string;
     content: React.ReactNode;
-  }) => (
-    <Popup
-      trigger={
-        <button>
-          {Icon && (
-            <div className="flex">
-              <Icon
-                className={`mr-2 ${
-                  selectedNoteId ? "" : "cursor-not-allowed opacity-50"
-                }`}
-                title={title}
-              />
-            </div>
-          )}
-          {IconDisplay && (
-            <div className="flex">
-              <IconDisplay className="mr-2" title={title} />
-            </div>
-          )}
-        </button>
-      }
-      {...popupProps}
-    >
-      <div className="mt-4 ml-96 flex flex-col place-items-center">
-        {content}
-      </div>
-    </Popup>
-  );
+  }) => {
+    return (
+      <Popup
+        arrow={false}
+        trigger={
+          <button>
+            {Icon && (
+              <div className="flex">
+                <Icon
+                  className={`mr-2 ${
+                    selectedNoteId ? "" : "cursor-not-allowed opacity-50"
+                  }`}
+                  title={title}
+                />
+              </div>
+            )}
+            {IconDisplay && (
+              <div className="flex">
+                <IconDisplay className="mr-2" title={title} />
+              </div>
+            )}
+          </button>
+        }
+      >
+        <div className="mt-4 ml-96 flex flex-col place-items-center">
+          {content}
+        </div>
+      </Popup>
+    );
+  };
 
   const popupData = [
     {
@@ -131,17 +129,14 @@ export const Content: React.FC = () => {
           title="Create note"
           content={
             <React.Fragment>
-              {isNoteCardOpen && (
-                <NoteCard
-                  onSave={({ title, content }) => {
-                    void createNote.mutate({
-                      title,
-                      content,
-                    });
-                    setIsNoteCardOpen(false);
-                  }}
-                />
-              )}
+              <NoteCard
+                onSave={({ title, content }) => {
+                  void createNote.mutate({
+                    title,
+                    content,
+                  });
+                }}
+              />
             </React.Fragment>
           }
         />
@@ -156,7 +151,7 @@ export const Content: React.FC = () => {
           title="Edit note"
           content={
             <React.Fragment>
-              {isNoteCardOpen && selectedNoteId && (
+              {selectedNoteId && (
                 <NoteCard
                   defaultTitle={selectedNoteTitle}
                   defaultContent={selectedNoteContent}
@@ -167,7 +162,6 @@ export const Content: React.FC = () => {
                         title,
                         content,
                       });
-                      setIsNoteCardOpen(false);
                     }
                   }}
                 />
@@ -186,14 +180,16 @@ export const Content: React.FC = () => {
           title="Email note"
           content={
             <React.Fragment>
-              {isNoteCardOpen && selectedNoteId && (
+              {openWindow && selectedNoteId && (
                 <EmailCard
                   recipientEmail={""}
                   defaultTitle={selectedNoteTitle}
                   defaultContent={selectedNoteContent}
                   onSubmit={({ title, content, recipientEmail }) => {
-                    sendEmail(title, content, recipientEmail);
-                    setIsNoteCardOpen(false);
+                    if (selectedNoteId) {
+                      sendEmail(title, content, recipientEmail);
+                    }
+                    setOpenWindow(false);
                   }}
                 />
               )}
