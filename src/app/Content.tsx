@@ -6,10 +6,9 @@ import { IoCreateOutline } from "react-icons/io5";
 import { AiOutlineSearch, AiOutlineEdit, AiOutlineMail } from "react-icons/ai";
 import { NoteCard } from "~/components/NoteCard";
 import { EmailCard } from "../components/EmailCard";
-import Popup from "reactjs-popup";
 import { sendEmail } from "~/services/email";
 import React from "react";
-import { type IconType } from "react-icons";
+import { PopupWindow } from "~/components/PopupWindow";
 
 export const Content: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -78,50 +77,16 @@ export const Content: React.FC = () => {
     }
   }, [selectedNoteId, notes]);
 
-  const PopupIcon = ({
-    icon: Icon,
-    iconDisplay: IconDisplay,
-    title,
-    content,
-    marginLeft,
-  }: {
-    icon: IconType | null;
-    iconDisplay: IconType | null;
-    title: string;
-    content: React.ReactNode;
-    marginLeft: string;
-  }) => {
-    return (
-      <Popup
-        arrow={false}
-        trigger={
-          <button>
-            {Icon && (
-              <Icon
-                className={`mr-2 ${
-                  selectedNoteId ? "" : "cursor-not-allowed opacity-50"
-                }`}
-                title={title}
-              />
-            )}
-            {IconDisplay && <IconDisplay className="mr-2" title={title} />}
-          </button>
-        }
-      >
-        <div className={`absolute mt-4 ${marginLeft}`}>{content}</div>
-      </Popup>
-    );
-  };
-
   const popupData = [
     {
       key: "create-note",
       popupComponent: (
-        <PopupIcon
+        <PopupWindow
           icon={null}
           iconDisplay={IoCreateOutline}
           title="Create note"
           marginLeft="m-[28rem]"
+          selectedNoteId={selectedNoteId}
           content={
             <React.Fragment>
               <NoteCard
@@ -140,14 +105,15 @@ export const Content: React.FC = () => {
     {
       key: "edit-note",
       popupComponent: (
-        <PopupIcon
+        <PopupWindow
           icon={AiOutlineEdit}
           iconDisplay={null}
           title="Edit note"
           marginLeft="m-[26rem]"
+          selectedNoteId={selectedNoteId}
           content={
             <React.Fragment>
-              {selectedNoteId && (
+              {openWindow && (
                 <NoteCard
                   defaultTitle={selectedNoteTitle}
                   defaultContent={selectedNoteContent}
@@ -159,6 +125,8 @@ export const Content: React.FC = () => {
                         content,
                       });
                     }
+                    setOpenWindow(false);
+                    setSelectedNoteId(null);
                   }}
                 />
               )}
@@ -170,11 +138,12 @@ export const Content: React.FC = () => {
     {
       key: "email-note",
       popupComponent: (
-        <PopupIcon
+        <PopupWindow
           icon={AiOutlineMail}
           iconDisplay={null}
           title="Email note"
           marginLeft="m-[24rem]"
+          selectedNoteId={selectedNoteId}
           content={
             <React.Fragment>
               {openWindow && selectedNoteId && (
@@ -187,6 +156,7 @@ export const Content: React.FC = () => {
                       sendEmail(title, content, recipientEmail);
                     }
                     setOpenWindow(false);
+                    setSelectedNoteId(null);
                   }}
                 />
               )}
