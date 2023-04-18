@@ -50,7 +50,7 @@ export const Content: React.FC = () => {
       setSelectedNoteId(null);
       setSelectedNoteTitle("");
       setSelectedNoteContent("");
-      setOpenWindow(false)
+      setOpenWindow(false);
     } else {
       const selectedNote = notes?.find((note) => note.id === noteId);
       if (selectedNote) {
@@ -83,11 +83,13 @@ export const Content: React.FC = () => {
     iconDisplay: IconDisplay,
     title,
     content,
+    marginLeft,
   }: {
     icon: IconType | null;
     iconDisplay: IconType | null;
     title: string;
     content: React.ReactNode;
+    marginLeft: string;
   }) => {
     return (
       <Popup
@@ -95,26 +97,18 @@ export const Content: React.FC = () => {
         trigger={
           <button>
             {Icon && (
-              <div className="flex">
-                <Icon
-                  className={`mr-2 ${
-                    selectedNoteId ? "" : "cursor-not-allowed opacity-50"
-                  }`}
-                  title={title}
-                />
-              </div>
+              <Icon
+                className={`mr-2 ${
+                  selectedNoteId ? "" : "cursor-not-allowed opacity-50"
+                }`}
+                title={title}
+              />
             )}
-            {IconDisplay && (
-              <div className="flex">
-                <IconDisplay className="mr-2" title={title} />
-              </div>
-            )}
+            {IconDisplay && <IconDisplay className="mr-2" title={title} />}
           </button>
         }
       >
-        <div className="mt-4 ml-96 flex flex-col place-items-center">
-          {content}
-        </div>
+        <div className={`absolute mt-4 ${marginLeft}`}>{content}</div>
       </Popup>
     );
   };
@@ -127,6 +121,7 @@ export const Content: React.FC = () => {
           icon={null}
           iconDisplay={IoCreateOutline}
           title="Create note"
+          marginLeft="m-[28rem]"
           content={
             <React.Fragment>
               <NoteCard
@@ -149,6 +144,7 @@ export const Content: React.FC = () => {
           icon={AiOutlineEdit}
           iconDisplay={null}
           title="Edit note"
+          marginLeft="m-[26rem]"
           content={
             <React.Fragment>
               {selectedNoteId && (
@@ -178,6 +174,7 @@ export const Content: React.FC = () => {
           icon={AiOutlineMail}
           iconDisplay={null}
           title="Email note"
+          marginLeft="m-[24rem]"
           content={
             <React.Fragment>
               {openWindow && selectedNoteId && (
@@ -245,14 +242,14 @@ export const Content: React.FC = () => {
           </div>
         </div>
         {selectedNoteId ? (
-          <div className="mt-4 ml-2 max-w-sm rounded-lg border bg-gray-100 p-8 shadow-md">
+          <div className="mt-4 ml-8 max-w-sm rounded-lg border bg-gray-100 p-8 shadow-md">
             <h2 className="mb-2 text-xl font-bold">{selectedNoteTitle}</h2>
             <p className="whitespace-pre-wrap text-gray-700">
               {selectedNoteContent}
             </p>
           </div>
         ) : (
-          <div className="items-left ml-2 mt-4 flex max-w-sm justify-center rounded-lg border p-12 text-lg text-gray-400 shadow-md">
+          <div className="items-left ml-8 mt-4 flex max-w-sm justify-center rounded-lg border p-12 text-lg text-gray-400 shadow-md">
             <p>No note selected</p>
           </div>
         )}
