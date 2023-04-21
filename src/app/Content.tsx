@@ -182,7 +182,7 @@ export const Content: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Quick search"
-            className="ml-2 focus:outline-none"
+            className="ml-2 bg-gray-50 focus:outline-none"
           />
         </div>
         {filteredNotes?.map((note) => (
