@@ -85,7 +85,7 @@ export const Content: React.FC = () => {
           icon={null}
           iconDisplay={IoCreateOutline}
           title="Create note"
-          marginLeft="m-[28rem]"
+          marginLeft="xl:ml-[28rem] sm:ml-[24rem]"
           selectedNoteId={selectedNoteId}
           content={
             <React.Fragment>
@@ -109,7 +109,7 @@ export const Content: React.FC = () => {
           icon={AiOutlineEdit}
           iconDisplay={null}
           title="Edit note"
-          marginLeft="m-[26rem]"
+          marginLeft="ml-[26rem] sm:ml-[20rem]"
           selectedNoteId={selectedNoteId}
           content={
             <React.Fragment>
@@ -142,7 +142,7 @@ export const Content: React.FC = () => {
           icon={AiOutlineMail}
           iconDisplay={null}
           title="Email note"
-          marginLeft="m-[24rem]"
+          marginLeft="ml-[24rem] sm:ml-[16rem]"
           selectedNoteId={selectedNoteId}
           content={
             <React.Fragment>
