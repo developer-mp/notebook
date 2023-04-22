@@ -169,9 +169,9 @@ export const Content: React.FC = () => {
 
   return (
     <div className="flex">
-      <div className="h-screen w-1/5 border-r-2">
+      <div className="h-screen w-1/4 border-r-2 2xl:w-1/5">
         <div className="w-screen border-b-2 p-2 font-bold">
-          <div className="ml-32">Notes</div>
+          <div className="w-1/4 text-center 2xl:w-1/5">Notes</div>
         </div>
         <div className="flex items-center border-b-2 p-2">
           <div className="ml-5 text-xl font-bold text-gray-500">
@@ -182,7 +182,7 @@ export const Content: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Quick search"
-            className="ml-2 bg-gray-50 focus:outline-none"
+            className="ml-2 w-full bg-gray-50 focus:outline-none"
           />
         </div>
         {filteredNotes?.map((note) => (
@@ -200,26 +200,22 @@ export const Content: React.FC = () => {
         ))}
       </div>
       <div className="w-full p-2">
-        <div className="mb-2 flex items-center">
-          <div className="text-xl font-bold text-gray-500">
-            <div className="text-2xl text-blue-900">
-              {popupData.map((data) => (
-                <React.Fragment key={data.key}>
-                  {data.popupComponent}
-                </React.Fragment>
-              ))}
-            </div>
-          </div>
+        <div className="text-2xl text-blue-900">
+          {popupData.map((data) => (
+            <React.Fragment key={data.key}>
+              {data.popupComponent}
+            </React.Fragment>
+          ))}
         </div>
         {selectedNoteId ? (
-          <div className="mt-4 ml-8 max-w-sm rounded-lg border bg-gray-100 p-8 shadow-md">
+          <div className="mt-6 ml-4 max-w-sm rounded-lg border bg-gray-100 p-8 shadow-md">
             <h2 className="mb-2 text-xl font-bold">{selectedNoteTitle}</h2>
             <p className="whitespace-pre-wrap text-gray-700">
               {selectedNoteContent}
             </p>
           </div>
         ) : (
-          <div className="items-left ml-8 mt-4 flex max-w-sm justify-center rounded-lg border p-12 text-lg text-gray-400 shadow-md">
+          <div className="items-left ml-4 mt-6 flex max-w-sm justify-center rounded-lg border p-12 text-lg text-gray-400 shadow-md">
             <p>No note selected</p>
           </div>
         )}
