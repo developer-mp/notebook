@@ -21,7 +21,7 @@ export const PopupWindow: React.FC<IPopupWindow> = (props) => {
         </button>
       }
     >
-      <div className={`sm:mt-44 xl:absolute xl:mt-4 ${props.marginLeft}`}>
+      <div className={`mt-4 md:mt-44 xl:absolute xl:mt-4 ${props.marginLeft}`}>
         {props.content}
       </div>
     </Popup>

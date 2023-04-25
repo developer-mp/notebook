@@ -9,6 +9,7 @@ import { EmailCard } from "../components/EmailCard";
 import { sendEmail } from "~/services/email";
 import React from "react";
 import { PopupWindow } from "~/components/PopupWindow";
+import { useMediaQuery } from "react-responsive";
 
 export const Content: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -85,7 +86,7 @@ export const Content: React.FC = () => {
           icon={null}
           iconDisplay={IoCreateOutline}
           title="Create note"
-          marginLeft="xl:ml-[28rem] sm:ml-[24rem]"
+          marginLeft="xl:ml-[28rem] md:ml-[24rem] ml-[18rem]"
           selectedNoteId={selectedNoteId}
           content={
             <React.Fragment>
@@ -109,7 +110,7 @@ export const Content: React.FC = () => {
           icon={AiOutlineEdit}
           iconDisplay={null}
           title="Edit note"
-          marginLeft="ml-[26rem] sm:ml-[20rem]"
+          marginLeft="xl:ml-[26rem] md:ml-[20rem] ml-[14rem]"
           selectedNoteId={selectedNoteId}
           content={
             <React.Fragment>
@@ -142,7 +143,7 @@ export const Content: React.FC = () => {
           icon={AiOutlineMail}
           iconDisplay={null}
           title="Email note"
-          marginLeft="ml-[24rem] sm:ml-[16rem]"
+          marginLeft="xl:ml-[24rem] md:ml-[16rem] ml-[10rem]"
           selectedNoteId={selectedNoteId}
           content={
             <React.Fragment>
@@ -167,11 +168,72 @@ export const Content: React.FC = () => {
     },
   ];
 
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+
+  if (isMobile)
+    return (
+      <div className="flex">
+        <div className="h-screen border-r-2">
+          <div className="w-screen border-b-2 p-2 font-bold">
+            <div className="text-center">Notes</div>
+          </div>
+          <div className="border-b-2 p-1.5">
+            <div className="ml-5 text-2xl text-blue-900">
+              {popupData.map((data) => (
+                <React.Fragment key={data.key}>
+                  {data.popupComponent}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center border-b-2 p-2">
+            <div className="ml-5 text-xl font-bold text-gray-500">
+              <AiOutlineSearch />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Quick search"
+              className="ml-2 w-full bg-gray-50 focus:outline-none"
+            />
+          </div>
+          {filteredNotes?.map((note) => (
+            <Note
+              key={note.id}
+              id={note.id}
+              title={note.title}
+              content={note.content}
+              onClick={() => {
+                void deleteNote.mutate({ id: note.id });
+              }}
+              isSelected={note.id === selectedNoteId}
+              onNoteClick={() => handleNoteClick(note.id)}
+            />
+          ))}
+          <div className="w-full p-2">
+            {selectedNoteId ? (
+              <div className="mt-6 rounded-lg border bg-gray-100 p-8 shadow-md">
+                <h2 className="mb-2 text-xl font-bold">{selectedNoteTitle}</h2>
+                <p className="whitespace-pre-wrap text-gray-700">
+                  {selectedNoteContent}
+                </p>
+              </div>
+            ) : (
+              <div className="items-left mt-6 flex justify-center rounded-lg border p-12 text-lg text-gray-400 shadow-md">
+                <p>No note selected</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+
   return (
     <div className="flex">
-      <div className="h-screen w-1/4 border-r-2 2xl:w-1/5">
+      <div className="h-screen border-r-2 md:w-1/4 2xl:w-1/5">
         <div className="w-screen border-b-2 p-2 font-bold">
-          <div className="w-1/4 text-center 2xl:w-1/5">Notes</div>
+          <div className="text-center md:w-1/4 2xl:w-1/5">Notes</div>
         </div>
         <div className="flex items-center border-b-2 p-2">
           <div className="ml-5 text-xl font-bold text-gray-500">
