@@ -1,8 +1,8 @@
-# Notebook
+### Notebook
 
 Notebook is a web application that allows users to manage notes.
 
-## Features
+### Features
 
 Users can create, edit, delete, and email notes. There is a search bar to search for notes. Users have to authenticate using Gmail before using the app.
 
